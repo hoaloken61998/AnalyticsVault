@@ -1,3 +1,44 @@
+/*
+================================================================================
+Stored Procedure Name : Silver.Load_Silver
+Purpose              :
+    This stored procedure automates the transformation and loading process 
+    from the Bronze layer into the Silver layer of the AnalyticsVault data 
+    warehouse. It performs the following actions:
+        - Truncates target Silver tables before each load to ensure data consistency.
+        - Applies business rules, data cleaning, and standardization 
+          (e.g., gender/marital status mapping, invalid date handling, 
+          null replacements, text trimming).
+        - Ensures only the latest customer records are loaded based on 
+          creation date.
+        - Derives surrogate attributes (e.g., product category, sales key, 
+          product line description).
+        - Captures and logs execution time for each table load individually.
+        - Provides overall batch duration for the full Silver load.
+        - Implements TRY...CATCH for error handling and logs error details.
+
+Data Sources         :
+    - Bronze.crm_customer    → Silver.crm_customer
+    - Bronze.prd_info        → Silver.prd_info
+    - Bronze.sales_details   → Silver.sales_details
+    - Bronze.erp_cust_az12   → Silver.erp_cust_az12
+    - Bronze.erp_loc_a101    → Silver.erp_loc_a101
+    - Bronze.erp_px_cat_g1v2 → Silver.erp_px_cat_g1v2
+
+Execution            :
+    EXEC Silver.Load_Silver
+
+Notes                :
+    - This procedure is intended for the **Silver transformation layer** 
+      of the ETL pipeline.
+    - Ensure that Bronze layer tables are fully loaded before executing 
+      this procedure.
+    - Use PRINT outputs to monitor table-by-table load start, end, and duration.
+    - Can be scheduled as part of the ETL orchestration workflow.
+================================================================================
+*/
+
+
 USE AnalyticsVault
 GO
 
@@ -245,3 +286,4 @@ BEGIN
 END
 
 EXEC Silver.Load_Silver
+
